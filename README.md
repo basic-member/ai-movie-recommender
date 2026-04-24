@@ -3,7 +3,7 @@
 An AI-powered movie recommendation engine that combines **Content-Based filtering** with **Deep Learning** architectures. The system features a robust **FastAPI** backend and an interactive **Streamlit** frontend.
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/e4eb678f-3755-4574-a947-8e751e1dfe33" width="700" alt="Movie Recommender Demo">
+  <img src="https://github.com/user-attachments/assets/f9ee5386-15b0-4c87-8af5-48b60ea02470" width="700" alt="Movie Recommender Demo">
   <p><i>Live demo of the Hybrid Recommender System in action</i></p>
 </div>
 
