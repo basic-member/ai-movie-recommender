@@ -1,7 +1,7 @@
 # Stage 1: Build
 FROM python:3.9-slim AS builder
 WORKDIR /build
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 # Stage 2: Final
