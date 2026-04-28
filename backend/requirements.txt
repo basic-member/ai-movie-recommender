@@ -1,6 +1,8 @@
 fastapi
 uvicorn
+sqlalchemy
 tensorflow
 numpy
-sqlalchemy
-pydantic
+pandas
+bz2file
+python-dotenv
