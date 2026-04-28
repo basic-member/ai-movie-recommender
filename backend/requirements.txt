@@ -1,8 +1,8 @@
 fastapi
 uvicorn
 sqlalchemy
-tensorflow==2.12.0
-numpy == 2.4.4
 pandas
 bz2file
 python-dotenv
+numpy==1.24.3
+tensorflow==2.13.0
