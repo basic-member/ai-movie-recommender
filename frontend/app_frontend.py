@@ -7,6 +7,7 @@ import os
 load_dotenv()
 
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 
 # 1. PAGE CONFIGURATION
 st.set_page_config(page_title="AI Hybrid Movie Recommender", page_icon="🎬", layout="wide")
@@ -28,7 +29,7 @@ def get_poster(tmdb_id):
 def get_all_movies():
     try:
         # Increase timeout to give backend time to respond
-        response = requests.get("http://127.0.0.1:8000/setup-db/list", timeout=10)
+        response = requests.get(f"{BACKEND_URL}/setup-db/list", timeout=10)
         if response.status_code == 200:
             return response.json()
     except Exception as e:
@@ -66,7 +67,7 @@ if movie_list is None:
         st.rerun()
     target_id = None
 elif len(movie_list) == 0:
-    st.warning("⚠️ **Database Empty:** Please run `http://127.0.0.1:8000/setup-db` in your browser first.")
+    st.warning(f"⚠️ **Database Empty:** Please run `{BACKEND_URL}/setup-db` in your browser first.")
     target_id = st.number_input("Manual Movie ID (for debugging):", value=0)
     selected_title = "Manual Input"
 else:
@@ -83,7 +84,7 @@ if st.button("🚀 Generate Recommendations"):
         payload = {"age": user_age, "gender": user_gender, "occu": user_occu}
         with st.spinner("Processing..."):
             try:
-                res = requests.post(f"http://127.0.0.1:8000/recommend/hybrid?movie_id={target_id}", json=payload)
+                res = requests.post(f"{BACKEND_URL}/recommend/hybrid?movie_id={target_id}", json=payload)
                 if res.status_code == 200:
                     results = res.json()
                     st.subheader(f"Recommendations based on '{selected_title}'")

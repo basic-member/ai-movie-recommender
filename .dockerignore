@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+LICENSE
+docs/
+
+# Python leftovers
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Secrets & Configs
+.env
+.vscode/
+
+# Data & DB
+*.db
