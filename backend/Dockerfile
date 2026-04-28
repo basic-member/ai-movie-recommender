@@ -14,7 +14,7 @@ ENV PATH=/root/.local/bin:$PATH
 
 COPY backend/ .
 
-COPY models_data/ ./models_data/
+COPY backend/models_data/ ./models_data/
 
 EXPOSE 8000
 
