@@ -1,42 +1,65 @@
-# 🎬 Hybrid Movie Recommendation System 
+# 🎬 AI-Powered Hybrid Movie Recommender
 
-An AI-powered movie recommendation engine that combines Content-Based filtering with Deep Learning architectures. The system features a robust FastAPI backend and an interactive Streamlit frontend.
+An enterprise-grade movie recommendation engine built with **FastAPI** and **TensorFlow**. This system features a sophisticated two-stage pipeline (Retrieval & Ranking) and is fully containerized for high-performance deployment.
 
-### 📺 Project Demo
-[![Hybrid Recommender Demo](https://img.shields.io/badge/🎥-View_Live_Demo-red?style=for-the-badge)](https://github.com/user-attachments/assets/d4b5825b-c28d-4e1a-a8c7-b99ba06c759c)
+### 📺 Project Preview
+[![Hybrid Recommender Demo](https://img.shields.io/badge/🎥-View_Live_Demo-red?style=for-the-badge)](https://github.com/basic-member/ai-movie-recommender)
 
-## 🚀 Key Features 
-* **Hybrid Engine:** Integrates TensorFlow (Keras) for deep learning-based ranking and Scikit-learn for content similarity. 
-* **Modern API:** High-performance asynchronous backend built with FastAPI. 
-* **Interactive UI:** User-friendly dashboard for searching and receiving real-time recommendations. 
-* **Data Management:** Efficient data handling using SQLAlchemy and SQLite. 
+## 🚀 Key Engineering Highlights
 
-## 🧠 Technical Highlights (Code Architecture) 
+*   **Modular API Design:** Decoupled backend logic using FastAPI `APIRouter` for clean and maintainable code.
+*   **Lazy Loading Engine:** Custom `ml_manager.py` implementation ensures heavy TensorFlow models are loaded into memory only upon the first request, optimizing RAM usage and startup speed.
+*   **Hybrid Intelligence:** Integrates **Content-Based Filtering** (Cosine Similarity) with **Neural Collaborative Filtering** (Deep Learning) for personalized re-ranking.
+*   **Full Dockerization:** Multi-container orchestration using `docker-compose` for seamless environment parity between development and production.
+*   **Production-Ready DB:** Managed data persistence using SQLAlchemy ORM with SQLite, including bulk-sync capabilities.
 
-### 1. Database Initialization & Schema 
-The project uses SQLAlchemy ORM for database management. 
-* **Setup Phase:** The `Base.metadata.create_all` command ensures that the `recommend.db` file is created with the correct tables. 
-* **Data Integrity:** Pydantic models validate movie data before it is persisted in the SQLite database. 
+## 🧠 Technical Architecture
 
-### 2. The Hybrid Recommendation Engine 
-The system utilizes a two-stage pipeline: 
-* **Stage 1: Candidate Generation:** Uses `cosine_similarity` on movie metadata to find the top 50 similar candidates. 
-* **Stage 2: Neural Ranking:** These candidates are fed into a TensorFlow/Keras model (`hybrid_recommender.keras`) to predict user ratings and provide the final Top-10 personalized results. 
+The system utilizes a professional **Two-Stage Pipeline** to provide recommendations:
+1.  **Stage 1: Candidate Generation (Retrieval):** Uses a pre-computed similarity matrix (`similarity.pbz2`) to identify the top 30 candidates from the database.
+2.  **Stage 2: Neural Re-ranking (Scoring):** These candidates are fed into a TensorFlow model (`hybrid_recommender.keras`) along with user demographics (Age, Gender, Occupation) to predict the final Top-5 results.
 
-## 🔐 Environment Variables (.env) Setup
-For security and production best practices, this project uses a `.env` file to manage sensitive credentials and configurations.
+## 🐳 Docker Deployment
 
-1. **Create a file** named `.env` in the root directory.
-2. **Add your credentials** in the following format:
+To launch the entire ecosystem (FastAPI Backend + Streamlit Frontend) with a single command:
 
+1.  **Clone the Repository:**
+    
+```bash
+    git clone [https://github.com/basic-member/ai-movie-recommender.git](https://github.com/basic-member/ai-movie-recommender.git)
+    cd ai-movie-recommender
+    ```
+
+2.  **Setup Environment:**
+    Ensure your model files are in `backend/models_data/`.
+
+3.  **Run with Docker Compose:**
+    ```bash
+    docker-compose up --build
+    ```
+    *   **Backend API:** `http://localhost:8000`
+    *   **Frontend UI:** `http://localhost:8501`
+
+## 📂 Project Structure
 ```text
-# Anthropic API Key for Agentic Reasoning
-ANTHROPIC_API_KEY=your_actual_api_key_here
-
-# Database connection string
-DATABASE_URL=sqlite:///./recommend.db
-
-> **Security Note:** The `.env` file is included in `.gitignore` to prevent your credentials from being leaked to GitHub.
+.
+├── backend/
+│   ├── models_data/       # AI Models & Data Assets (.keras, .pkl, .pbz2)
+│   ├── routers/           # Modular API endpoints (admin.py, recommender.py)
+│   ├── database.py        # SQLAlchemy configuration
+│   ├── ml_manager.py      # Lazy loading & Model registry logic
+│   ├── models.py          # SQLAlchemy database models
+│   ├── schema.py          # Pydantic validation schemas
+│   ├── main.py            # FastAPI entry point
+│   ├── Dockerfile         # Backend service container config
+│   └── requirements.txt   # Backend dependencies (TensorFlow, FastAPI, etc.)
+├── frontend/
+│   ├── app_frontend.py    # Streamlit interactive dashboard
+│   ├── Dockerfile         # Frontend service container config
+│   └── requirements.txt   # Frontend dependencies (Streamlit, Requests)
+├── docker-compose.yml     # Multi-container orchestration
+├── .dockerignore          # Optimization to exclude venv and local DB from builds
+└── .gitignore             # Ensures large models and venv are not tracked
 
 ## 📥 Model Files (Download Links)
 Since these model files are too large for GitHub, please download them and place them in the `models_data/` directory:
@@ -54,12 +77,3 @@ Since these model files are too large for GitHub, please download them and place
 * **Ermia Masoumi**
 * GitHub: [basic-member](https://github.com/basic-member)
 * LinkedIn: [basic-member](https://www.linkedin.com/in/basic-member3/)
-
-## 📂 Project Structure
-```text
-. 
-├── backend/          # FastAPI logic, Database models, and Schema 
-├── frontend/         # Streamlit UI implementation 
-├── models_data/      # Trained .keras models and .pkl data files 
-├── requirements.txt  # Project dependencies 
-└── README.md
