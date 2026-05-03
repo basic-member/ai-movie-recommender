@@ -2,22 +2,46 @@
 
 An enterprise-grade movie recommendation engine built with **FastAPI** and **TensorFlow**. This system features a sophisticated two-stage pipeline (Retrieval & Ranking) and is fully containerized for high-performance deployment.
 
-### 📺 Project Preview
-[![Hybrid Recommender Demo](https://img.shields.io/badge/🎥-View_Live_Demo-red?style=for-the-badge)](https://github.com/basic-member/ai-movie-recommender)
+## 🧠 Two-Stage AI Architecture
+
+The system utilizes a professional **Two-Stage Pipeline** to provide highly personalized recommendations:
+
+### 1. Stage 1: Candidate Generation (Retrieval)
+*   **Model:** Content-Based Filtering (Cosine Similarity).
+*   **Logic:** Analyzes movie metadata (genres, overviews) using `CountVectorizer`. Genres are weighted 3x higher to ensure category relevance.
+*   **Goal:** Quickly narrows down thousands of movies to the top 30 most relevant candidates.
+*   **Script:** `backend/scripts/stage1_content_based.py`
+
+### 2. Stage 2: Neural Re-ranking (Scoring)
+*   **Model:** Neural Collaborative Filtering (Deep Learning).
+*   **Logic:** A TensorFlow model trained on the MovieLens 100k dataset. It takes the 30 candidates and processes them through an Embedding layer alongside **User Demographics** (Age, Gender, Occupation).
+*   **Goal:** Predicts the specific rating a unique user would give to each candidate, delivering a final Top-5 personalized list.
+*   **Script:** `backend/scripts/stage2_neural_ranking.py`
 
 ## 🚀 Key Engineering Highlights
 
-*   **Modular API Design:** Decoupled backend logic using FastAPI `APIRouter` for clean and maintainable code.
-*   **Lazy Loading Engine:** Custom `ml_manager.py` implementation ensures heavy TensorFlow models are loaded into memory only upon the first request, optimizing RAM usage and startup speed.
-*   **Hybrid Intelligence:** Integrates **Content-Based Filtering** (Cosine Similarity) with **Neural Collaborative Filtering** (Deep Learning) for personalized re-ranking.
-*   **Full Dockerization:** Multi-container orchestration using `docker-compose` for seamless environment parity between development and production.
-*   **Production-Ready DB:** Managed data persistence using SQLAlchemy ORM with SQLite, including bulk-sync capabilities.
+*   **Modular API Design:** Decoupled backend logic using FastAPI `APIRouter`.
+*   **Lazy Loading Engine:** `ml_manager.py` ensures heavy TensorFlow models are loaded only upon the first request to optimize RAM.
+*   **Security & Auth:** Implemented OAuth2 with JWT for secure user activities and admin actions.
+*   **Full Dockerization:** Multi-container orchestration using `docker-compose`.
 
-## 🧠 Technical Architecture
-
-The system utilizes a professional **Two-Stage Pipeline** to provide recommendations:
-1.  **Stage 1: Candidate Generation (Retrieval):** Uses a pre-computed similarity matrix (`similarity.pbz2`) to identify the top 30 candidates from the database.
-2.  **Stage 2: Neural Re-ranking (Scoring):** These candidates are fed into a TensorFlow model (`hybrid_recommender.keras`) along with user demographics (Age, Gender, Occupation) to predict the final Top-5 results.
+## 📂 Project Structure
+```text
+.
+├── backend/
+│   ├── models_data/       # AI Models & Data Assets (.keras, .pkl)
+│   ├── routers/           # Modular API endpoints (activities, admin, recommender)
+│   ├── scripts/           # Core training & logic for Stage 1 & Stage 2
+│   ├── ml_manager.py      # Lazy loading & Model registry logic
+│   ├── database.py        # SQLAlchemy configuration
+│   ├── models.py          # SQLAlchemy database models
+│   ├── main.py            # FastAPI entry point
+│   └── Dockerfile         # Backend service container config
+├── frontend/
+│   ├── app_frontend.py    # Streamlit interactive dashboard
+│   └── Dockerfile         # Frontend service container config
+├── docker-compose.yml     # Multi-container orchestration
+└── .gitignore             # Ensures large models and venv are not tracked
 
 ## 🐳 Docker Deployment
 
@@ -42,24 +66,6 @@ To launch the entire ecosystem (FastAPI Backend + Streamlit Frontend) with a sin
 
 ## 📂 Project Structure
 ```text
-.
-├── backend/
-│   ├── models_data/       # AI Models & Data Assets (.keras, .pkl, .pbz2)
-│   ├── routers/           # Modular API endpoints (admin.py, recommender.py)
-│   ├── database.py        # SQLAlchemy configuration
-│   ├── ml_manager.py      # Lazy loading & Model registry logic
-│   ├── models.py          # SQLAlchemy database models
-│   ├── schema.py          # Pydantic validation schemas
-│   ├── main.py            # FastAPI entry point
-│   ├── Dockerfile         # Backend service container config
-│   └── requirements.txt   # Backend dependencies (TensorFlow, FastAPI, etc.)
-├── frontend/
-│   ├── app_frontend.py    # Streamlit interactive dashboard
-│   ├── Dockerfile         # Frontend service container config
-│   └── requirements.txt   # Frontend dependencies (Streamlit, Requests)
-├── docker-compose.yml     # Multi-container orchestration
-├── .dockerignore          # Optimization to exclude venv and local DB from builds
-└── .gitignore             # Ensures large models and venv are not tracked
 
 ## 📥 Model Files (Download Links)
 Since these model files are too large for GitHub, please download them and place them in the `models_data/` directory:
