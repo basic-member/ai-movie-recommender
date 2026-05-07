@@ -7,7 +7,6 @@ from ml_manager import get_movies_df
 movies_df = get_movies_df()
 
 router = APIRouter(
-    prefix="/data",
     tags=["data"]
 )
 
@@ -26,18 +25,18 @@ def setup_db(db: Session = Depends(get_db)):
         new_movies_objs = []
 
         for index, row in movies_df.iterrows():
-            tmdb_id_val = int(row['id'])
-            if tmdb_id_val in seen_tmdb_ids:
+            # Standard MovieLens/TMDB datasets often have 'id' as the TMDB ID
+            t_id = int(row.get('id', 0))
+            if t_id == 0 or t_id in seen_tmdb_ids:
                 continue
             
-            # Map index to ID to maintain alignment with similarity matrix
             new_movie = Movie(
                 id=int(index), 
-                tmdb_id=tmdb_id_val, 
+                tmdb_id=t_id, 
                 title=str(row['title'])
             )
             new_movies_objs.append(new_movie)
-            seen_tmdb_ids.add(tmdb_id_val)
+            seen_tmdb_ids.add(t_id)
 
         db.bulk_save_objects(new_movies_objs)
         db.commit()
@@ -50,4 +49,4 @@ def setup_db(db: Session = Depends(get_db)):
 def get_movies_list(db: Session = Depends(get_db)):
     """Fetches all movies for UI selection."""
     movies = db.query(Movie).all()
-    return [{"id": m.id, "title": m.title} for m in movies]
+    return [{"id": m.id, "title": m.title, "tmdb_id": m.tmdb_id} for m in movies]

@@ -1,5 +1,29 @@
-﻿.venv/
-venv/
-__pycache__/
+# Security & Environment
 .env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Database
 *.db
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# Models & Data (Optional: keeping small pkl files is ok, but large ones should be ignored)
+# models_data/*.pkl
