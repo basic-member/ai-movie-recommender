@@ -53,11 +53,12 @@ def get_all_movies():
 @st.cache_data
 def get_occupations():
     try:
-        with open("../models_data/occupation_map.pkl", 'rb') as f:
-            occu_map = pickle.load(f)
-        return sorted(list(occu_map.keys()))
+        response = requests.get(f"{BACKEND_URL}/recommender/occupations", timeout=5)
+        if response.status_code == 200:
+            return response.json()
     except:
-        return ["Student", "Engineer", "Technician", "Other"]
+        pass
+    return ["Student", "Engineer", "Technician", "Other"]
 
 def like_movie(movie_id):
     if not st.session_state.token:

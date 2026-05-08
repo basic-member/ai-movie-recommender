@@ -121,3 +121,8 @@ def hybrid_recommendation(
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal Recommender Engine Failure")
+@router.get("/occupations/")
+def get_occupations_list():
+    """Returns the list of occupations for the frontend."""
+    occu_map = get_occu_map()
+    return sorted(list(occu_map.keys())) if occu_map else ["Other"]

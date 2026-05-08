@@ -1,6 +1,6 @@
 FROM python:3.9-slim AS builder
 WORKDIR /build
-COPY frontend/requirements.txt .
+COPY requirements.txt .
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 
@@ -14,4 +14,5 @@ ENV PATH=/root/.local/bin:$PATH
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "app_frontend.py", "--server.port=8501", "--server.address=0.0.0.0"] 
+# Use the PORT environment variable if available, fallback to 8501
+CMD ["sh", "-c", "streamlit run app_frontend.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
