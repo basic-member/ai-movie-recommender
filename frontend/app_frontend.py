@@ -4,15 +4,20 @@ import os
 import pickle
 from dotenv import load_dotenv
 
-# Find .env in the root directory
-load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
+# Try to load .env, but don't fail if it's missing (env vars are better for production)
+env_path = os.path.join(os.path.dirname(__file__), "../.env")
+if os.path.exists(env_path):
+    load_dotenv(env_path)
+else:
+    # Also try the current directory just in case
+    load_dotenv()
 
 # --- CONFIGURATION ---
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
-BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000").rstrip("/")
 
 if not TMDB_API_KEY:
-    st.error("🔑 **TMDB API Key missing!** Check your .env file.")
+    st.error("🔑 **TMDB API Key missing!** Set it in environment variables or .env file.")
 
 st.set_page_config(page_title="AI Hybrid Movie Recommender", page_icon="🎬", layout="wide")
 

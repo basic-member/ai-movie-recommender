@@ -9,10 +9,11 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 FROM python:3.9-slim
 WORKDIR /app
 
-COPY --from=builder /root/.local /root/.local
+# Ensure logs are delivered to Railway dashboard
+ENV PYTHONUNBUFFERED=1
 ENV PATH=/root/.local/bin:$PATH
 
-# Copy only the contents of the backend folder (assuming backend/ is the context)
+COPY --from=builder /root/.local /root/.local
 COPY . .
 
 EXPOSE 8000
